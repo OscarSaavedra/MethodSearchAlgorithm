@@ -25,80 +25,89 @@ public class Graph{
         return (multimapNodeConnection.get(node));
     }
 
-    public List<Node> getConexionPath(String nodeStart, String nodeEnd,Integer numberOfChecksAllowed) {
-
-        Node primeroLista= nodesByName.get(nodeStart);
-        Node nodeDestino = nodesByName.get(nodeEnd);
-
-        Set<Node> visited = new HashSet<>();
-        Map<Node, Node> predecesor = new HashMap<>();
+    public List<Node> getConexionPath(String nodeStart, String nodeEnd,Integer numberOfChecksAllowed,GraphCreation obj) {
 
         List<Node> path = new LinkedList<>();
-        Queue<Node> cola = new LinkedList<>();
 
-        cola.add(primeroLista);
-        visited.add(primeroLista);
+        try {
+            Method m1=obj.getClass().getMethod(nodeStart);
+            Method m2=obj.getClass().getMethod(nodeEnd);
 
-        int numberOfChecks=1;
 
-        List<Node>finalAddedNodes=new ArrayList<>();
+            Node primeroLista = nodesByName.get(m1);
+            Node nodeDestino = nodesByName.get(m2);
 
-        boolean encontrado=false;
-        while(!cola.isEmpty()){
-            primeroLista = cola.poll();
-            System.out.print("Visitando el nodo:");
-            System.out.println(primeroLista);
-            System.out.print("El objetivo es:");
-            System.out.println(nodeDestino);
-            System.out.println("Comprobación número: ["+(numberOfChecks+"]"));
-            System.out.println("------------------------------------------- ");
-            if (numberOfChecks>numberOfChecksAllowed){
-                break;
-            }
-            numberOfChecks++;
-            if (primeroLista.equals(nodeDestino)){
-                encontrado=true;
-                System.out.println("Se han añadido "+finalAddedNodes.size()+" " +
-                        "nodos en total para conseguir realizar la búsqueda: "+finalAddedNodes);
-                System.out.println();
-                break;
-            }else{
-                for (Node adjacent:getAdjacents(primeroLista)) {
-                    //bloque1:saber si un nodo solo tiene una conexion y no es el destino
-                    boolean cond1=getAdjacents(adjacent).size()==1;
-                    boolean cond2=getAdjacents(adjacent).contains(primeroLista);
-                    boolean cond3=adjacent!=nodeDestino;
-                    //fin bloque1
+            Set<Node> visited = new HashSet<>();
+            Map<Node, Node> predecesor = new HashMap<>();
 
-                    //bloque2:
-                    //fin bloque2
 
-                    if((!visited.contains(adjacent))&&(!((cond1)&&(cond2)&&(cond3)))){
-                        visited.add(adjacent);
-                        predecesor.put(adjacent, primeroLista);
-                        cola.add(adjacent);
-                        finalAddedNodes.add(adjacent);
+            Queue<Node> cola = new LinkedList<>();
+
+            cola.add(primeroLista);
+            visited.add(primeroLista);
+
+            int numberOfChecks = 1;
+
+            List<Node> finalAddedNodes = new ArrayList<>();
+
+            boolean encontrado = false;
+            while (!cola.isEmpty()) {
+                primeroLista = cola.poll();
+                System.out.print("Visitando el nodo:");
+                System.out.println(primeroLista);
+                System.out.print("El objetivo es:");
+                System.out.println(nodeDestino);
+                System.out.println("Comprobación número: [" + (numberOfChecks + "]"));
+                System.out.println("------------------------------------------- ");
+                if (numberOfChecks > numberOfChecksAllowed) {
+                    break;
+                }
+                numberOfChecks++;
+                if (primeroLista.equals(nodeDestino)) {
+                    encontrado = true;
+                    System.out.println("Se han añadido " + finalAddedNodes.size() + " " +
+                            "nodos en total para conseguir realizar la búsqueda: " + finalAddedNodes);
+                    System.out.println();
+                    break;
+                } else {
+                    for (Node adjacent : getAdjacents(primeroLista)) {
+                        //bloque1:saber si un nodo solo tiene una conexion y no es el destino
+                        boolean cond1 = getAdjacents(adjacent).size() == 1;
+                        boolean cond2 = getAdjacents(adjacent).contains(primeroLista);
+                        boolean cond3 = adjacent != nodeDestino;
+                        //fin bloque1
+
+                        //bloque2:
+                        //fin bloque2
+
+                        if ((!visited.contains(adjacent)) && (!((cond1) && (cond2) && (cond3)))) {
+                            visited.add(adjacent);
+                            predecesor.put(adjacent, primeroLista);
+                            cola.add(adjacent);
+                            finalAddedNodes.add(adjacent);
+                        }
                     }
                 }
             }
-        }
-        if (encontrado){
-            for(Node node = nodeDestino; node != null; node = predecesor.get(node)) {
-                path.add(node);
+            if (encontrado) {
+                for (Node node = nodeDestino; node != null; node = predecesor.get(node)) {
+                    path.add(node);
+                }
+                Collections.reverse(path);
+                System.out.println("Se encuentran a una distancia de " + (path.size() - 1));
+            } else {
+                if (numberOfChecks > numberOfChecksAllowed) {
+                    System.out.println("La busqueda necesita mas comprobaciones");
+                } else {
+                    System.out.println("No hay conexión posible o uno de los nodos no existe");
+                }
             }
-            Collections.reverse(path);
-            System.out.println("Se encuentran a una distancia de "+(path.size()-1));
-        }else{
-            if(numberOfChecks>numberOfChecksAllowed){
-                System.out.println("La busqueda necesita mas comprobaciones");
-            }else {
-                System.out.println("No hay conexión posible o uno de los nodos no existe");
-            }
+            System.out.println("Camino recorrido: " + path.toString().replace(", ", "-->"));
+        }catch (NoSuchMethodException nsme){
+            System.out.println("Alguno de los métodos no se encuentra");
         }
-        System.out.println("Camino recorrido: "+path.toString().replace(", ","-->"));
         return path;
     }
-
     public void setSavedSearch(String name, List<Node> searchlist){
         savedSearch.put(name,searchlist);
     }
