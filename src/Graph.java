@@ -30,8 +30,8 @@ public class Graph{
         List<Node> path = new LinkedList<>();
 
         try {
-            Method m1=obj.getClass().getMethod(nodeStart);
-            Method m2=obj.getClass().getMethod(nodeEnd);
+            Method m1=obj.getClass().getMethod(nodeStart,int.class);
+            Method m2=obj.getClass().getMethod(nodeEnd,int.class);
 
 
             Node primeroLista = nodesByName.get(m1);
