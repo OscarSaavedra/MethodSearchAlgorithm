@@ -24,14 +24,17 @@ public class Graph{
     public List<Node> getAdjacents(Node node){
         return (multimapNodeConnection.get(node));
     }
+    public Set<Method> getNodeGeneralListInMeth(){
+        return nodesByName.keySet();
+    }
 
     public List<Node> getConexionPath(String nodeStart, String nodeEnd,Integer numberOfChecksAllowed,GraphCreation obj) {
 
         List<Node> path = new LinkedList<>();
 
         try {
-            Method m1=obj.getClass().getMethod(nodeStart,int.class);
-            Method m2=obj.getClass().getMethod(nodeEnd,int.class);
+            Method m1=obj.getClass().getMethod(nodeStart,boolean.class);
+            Method m2=obj.getClass().getMethod(nodeEnd,boolean.class);
 
 
             Node primeroLista = nodesByName.get(m1);
@@ -108,6 +111,8 @@ public class Graph{
         }
         return path;
     }
+
+
     public void setSavedSearch(String name, List<Node> searchlist){
         savedSearch.put(name,searchlist);
     }

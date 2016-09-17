@@ -4,7 +4,7 @@ public class GraphCreation {
 
     GraphCreation(){
     }
-
+    //arithmetic meths/nodes
     public static int meth1(int num){
         return num*2;
     }
@@ -29,8 +29,36 @@ public class GraphCreation {
     public static void meth8(int num){
 
     }
+    ///////////////////////////////////////////////////
 
-    public  Graph graphProcess1(GraphCreation obj){
+
+    //logical meths/nodes
+    public static boolean andMeth(boolean b){
+        boolean out=true;
+        return b&&out;
+    }
+    public static boolean orMeth (boolean b){
+        boolean out=true;
+        return b||out;
+    }
+    public static boolean notMeth(boolean b){
+        return !b;
+    }
+    public static boolean equalMeth(boolean b){
+        boolean out=true;
+        return b==out;
+    }
+    public static boolean notEqualMeth (boolean b){
+        boolean out=true;
+        return b!=out;
+    }
+    public static boolean xorMeth (boolean b){
+        boolean out=true;
+        return b^out;
+    }
+    //////////////////////////////////////////////////////
+
+    public Graph graphProcess1(GraphCreation obj){
         Graph graph=new Graph();
         try{
             Method meth1Object = obj.getClass().getMethod("meth1",int.class);
@@ -87,6 +115,77 @@ public class GraphCreation {
 
         }catch (NoSuchMethodException nsme){
             System.out.println("Alguno de los métodos no existe");
+        }
+        return graph;
+    }
+    public Graph graphProcess2(GraphCreation obj){
+        Graph graph=new Graph();
+        try{
+            Method andMethObj=obj.getClass().getMethod("andMeth",boolean.class);
+            Method orMethObj=obj.getClass().getMethod("orMeth",boolean.class);
+            Method notMethObj=obj.getClass().getMethod("notMeth",boolean.class);
+            Method equalMethObj=obj.getClass().getMethod("equalMeth",boolean.class);
+            Method notEqualMethObj=obj.getClass().getMethod("notEqualMeth",boolean.class);
+            Method xorMethObj=obj.getClass().getMethod("xorMeth",boolean.class);
+
+            Node andMethNode=new Node(andMethObj);
+            Node orMethNode=new Node(orMethObj);
+            Node notMethNode=new Node(notMethObj);
+            Node equalMethNode=new Node(equalMethObj);
+            Node notEqualMethNode=new Node(notEqualMethObj);
+            Node xorMethNode=new Node(xorMethObj);
+
+            graph.addNode(andMethNode);
+            graph.addNode(orMethNode);
+            graph.addNode(notMethNode);
+            graph.addNode(equalMethNode);
+            graph.addNode(notEqualMethNode);
+            graph.addNode(xorMethNode);
+
+
+            graph.connect(andMethNode,xorMethNode);
+            graph.connect(andMethNode,notMethNode);
+            graph.connect(andMethNode,equalMethNode);
+            graph.connect(andMethNode,notEqualMethNode);
+            graph.connect(andMethNode,orMethNode);
+
+
+            graph.connect(xorMethNode,notMethNode);
+            graph.connect(xorMethNode,equalMethNode);
+            graph.connect(xorMethNode,notEqualMethNode);
+            graph.connect(xorMethNode,orMethNode);
+            graph.connect(xorMethNode,andMethNode);
+
+
+            graph.connect(notMethNode,equalMethNode);
+            graph.connect(notMethNode,notEqualMethNode);
+            graph.connect(notMethNode,orMethNode);
+            graph.connect(notMethNode,andMethNode);
+            graph.connect(notMethNode,xorMethNode);
+
+
+            graph.connect(equalMethNode,notEqualMethNode);
+            graph.connect(equalMethNode,orMethNode);
+            graph.connect(equalMethNode,andMethNode);
+            graph.connect(equalMethNode,xorMethNode);
+            graph.connect(equalMethNode,notEqualMethNode);
+
+
+            graph.connect(notEqualMethNode,orMethNode);
+            graph.connect(notEqualMethNode,andMethNode);
+            graph.connect(notEqualMethNode,xorMethNode);
+            graph.connect(notEqualMethNode,notMethNode);
+            graph.connect(notEqualMethNode,equalMethNode);
+
+
+            graph.connect(orMethNode,andMethNode);
+            graph.connect(orMethNode,xorMethNode);
+            graph.connect(orMethNode,notMethNode);
+            graph.connect(orMethNode,equalMethNode);
+            graph.connect(orMethNode,notEqualMethNode);
+
+        }catch (NoSuchMethodException nsme){
+            System.out.println("Método no encontrado");
         }
         return graph;
     }
