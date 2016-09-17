@@ -43,16 +43,21 @@ public class ConnectionType {
 
     //logic connections block
     public static boolean andConnection(boolean bool,List<Node> procesoList){
+        boolean valor[]=new boolean[procesoList.size()];
         boolean resultado=true;
+
+        int i=0;
         System.out.println("Valor de la entrada: "+bool);
         try{
             for (Node proceso : procesoList) {
-                resultado=resultado&&((Boolean) proceso.getName().invoke(null,bool));
-                System.out.println("Valor del input: "+proceso.getName().invoke(null,bool));
+                valor[i]=((Boolean) proceso.getName().invoke(null,bool));
+                System.out.println("Resultado en nodo "+proceso.getName().getName()+": "+valor[i]);
+                i++;
             }
         }catch (IllegalAccessException|InvocationTargetException err){
             System.out.println("Error");
         }
-        return resultado;
+
+        return valor[0]&&valor[1];
     }
 }
